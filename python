@@ -1,0 +1,40 @@
+def analyze_web_data(pages):
+    """
+    Example analysis: count word frequency of 'Python' in each page.
+    """
+    data = []
+    for url, html in pages.items():
+        count = html.lower().count('python')
+        data.append({'url': url, 'python_count': count})
+    df = pd.DataFrame(data)
+    print("\nData Analysis: Count of 'Python' occurrences per URL")
+    print(df)
+    return df
+
+
+# ----------------------------
+# Project 3: Simple REST API Server with Flask
+# ----------------------------
+
+app = Flask(__name__)
+# In-memory storage for demo
+items = []
+
+@app.route('/items', methods=['GET'])
+def get_items():
+    return jsonify(items)
+
+@app.route('/items', methods=['POST'])
+def add_item():
+    data = request.get_json()
+    item = {
+        'id': len(items) + 1,
+        'name': data.get('name', 'Unnamed'),
+        'description': data.get('description', '')
+    }
+    items.append(item)
+    return jsonify(item), 201
+
+def run_api_server():
+    print("Starting Flask API server on http://127.0.0.1:5000")
+    app.run(debug=True)
